@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">App_Running</string>
+    <string name="guest_content">게스트로 입장하실 경우 \n 나혼자 러닝(개인 기록 측정용)만 \n 이용하실 수 있습니다.</string>
+   
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
