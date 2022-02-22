@@ -2,7 +2,7 @@
     <string name="app_name">App_Running</string>
     <string name="guest_content">게스트로 입장하실 경우 \n 나혼자 러닝(개인 기록 측정용)만 \n 이용하실 수 있습니다.</string>
     <string name="password_rule">여섯자리 이상 입력해 주세요</string>
-    <string name="find_password">비밀번호 재설정 이메일을 받을 \n 주소를 입력해주세요</string>
+    <string name="find_password">비밀번호 재설정 이메일을 받을 주소를 입력해주세요</string>
     <string name="question">비밀번호가 기억나지 않으신가요?</string>
    
     <!-- TODO: Remove or change this placeholder text -->

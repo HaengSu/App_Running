@@ -75,11 +75,22 @@ class FragmentLogin : Fragment(), View.OnClickListener {
                             } else {
                                 Log.d(TAG, "signInWithEmail: false ")
                                 Toast.makeText(
-                                    mContext, "email, password를 다시 확인해주세요.",
+                                    mContext, "가입되지 않은 정보입니다.",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
                         }
+                } else {
+                    if(email.isEmpty()) {
+                        Toast.makeText(
+                            mContext, "Email을 입력해 주세요.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else
+                    Toast.makeText(
+                        mContext, "Password를 입력해 주세요.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             binding.findPassword.id -> {
