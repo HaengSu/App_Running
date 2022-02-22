@@ -1,9 +1,10 @@
-package org.techtown.app_running
+package org.techtown.app_running.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import org.techtown.app_running.R
 
 
 class MainActivity : AppCompatActivity() {

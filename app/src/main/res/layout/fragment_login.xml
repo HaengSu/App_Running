@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/email"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="80dp"
@@ -26,14 +26,14 @@
         android:layout_marginEnd="80dp"
         android:background="@drawable/shape_round"
         android:gravity="center"
-        android:hint="ID"
+        android:hint="Email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/password"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="80dp"
@@ -41,14 +41,15 @@
         android:layout_marginEnd="80dp"
         android:background="@drawable/shape_round"
         android:gravity="center"
-        android:hint="PS"
+        android:hint="Password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/email" />
 
 
     <Button
+        android:id="@+id/login"
         android:layout_width="107dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
@@ -57,7 +58,7 @@
         android:text="로그인"
         app:layout_constraintEnd_toStartOf="@+id/signUp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <Button
         android:id="@+id/signUp"
@@ -67,7 +68,7 @@
         android:layout_marginEnd="80dp"
         android:text="회원가입"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
 
     <ImageView
@@ -79,7 +80,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/signInButton"

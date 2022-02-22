@@ -8,29 +8,40 @@
     <fragment
         tools:layout="@layout/fragment_login"
         android:id="@+id/fragmentLogin"
-        android:name="org.techtown.app_running.FragmentLogin"
+        android:name="org.techtown.app_running.view.fragment.FragmentLogin"
         android:label="FragmentLogin" >
         <action
             android:id="@+id/action_fragmentLogin_to_fragmentMain"
-            app:destination="@id/fragmentMain" />
+            app:destination="@id/fragmentMain"
+            app:enterAnim="@anim/enter_right" />
         <action
             android:id="@+id/action_fragmentLogin_to_fragmentSignUp"
-            app:destination="@id/fragmentSignUp" />
+            app:destination="@id/fragmentSignUp"
+            app:enterAnim="@anim/enter_up" />
     </fragment>
 
     <fragment
         tools:layout="@layout/fragment_main"
         android:id="@+id/fragmentMain"
-        android:name="org.techtown.app_running.FragmentMain"
-        android:label="FragmentMain" />
+        android:name="org.techtown.app_running.view.fragment.FragmentMain"
+        android:label="FragmentMain" >
+        <argument
+            android:name="userEmail"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         tools:layout="@layout/fragment_sign_up"
         android:id="@+id/fragmentSignUp"
-        android:name="org.techtown.app_running.FragmentSignUp"
+        android:name="org.techtown.app_running.view.fragment.FragmentSignUp"
         android:label="FragmentSignUp" >
         <action
             android:id="@+id/action_fragmentSignUp_to_fragmentMain"
             app:destination="@id/fragmentMain" />
+        <action
+            android:id="@+id/action_fragmentSignUp_to_fragmentLogin"
+            app:destination="@id/fragmentLogin"
+            app:enterAnim="@anim/enter_down"
+            app:exitAnim="@anim/exit_down" />
     </fragment>
 </navigation>
