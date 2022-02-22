@@ -68,7 +68,7 @@ class CustomDialog(context: Context) : View.OnClickListener {
             }
         }
     }
-
+//
 }
 }
 
