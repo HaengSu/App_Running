@@ -70,7 +70,8 @@ class FragmentSignUp : Fragment(), View.OnClickListener {
                                 navController.navigate(R.id.action_fragmentSignUp_to_fragmentLogin)
 
                             } else {
-                                Toast.makeText(mContext, "이미 가입되어 있는 이메일 입니다.", Toast.LENGTH_SHORT)
+                                Log.d(TAG, "onClick: 계정 생성 실패")
+                                Toast.makeText(mContext, "계정 생성에 실패하였습니다.", Toast.LENGTH_SHORT)
                                     .show()
                             }
                         }

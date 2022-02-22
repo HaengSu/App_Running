@@ -17,6 +17,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import org.techtown.app_running.R
 import org.techtown.app_running.databinding.FragmentLoginBinding
+import org.techtown.app_running.view.CustomDialog
 import org.techtown.app_running.view.MainActivity
 
 class FragmentLogin : Fragment(), View.OnClickListener {
@@ -46,8 +47,8 @@ class FragmentLogin : Fragment(), View.OnClickListener {
         binding.guestLogin.setOnClickListener(this)
         binding.signUp.setOnClickListener(this)
         binding.login.setOnClickListener(this)
+        binding.findPassword.setOnClickListener(this)
     }
-
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
@@ -79,8 +80,11 @@ class FragmentLogin : Fragment(), View.OnClickListener {
                                 ).show()
                             }
                         }
-
                 }
+            }
+            binding.findPassword.id -> {
+                var dialog = CustomDialog(mContext)
+                dialog.showDialog()
             }
         }
     }
