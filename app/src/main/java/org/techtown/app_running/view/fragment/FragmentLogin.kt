@@ -158,7 +158,7 @@ class FragmentLogin : Fragment(), View.OnClickListener {
     fun createIntent() {
         //구글로그인 초기설정
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestIdToken("816172179738-ccj6vdo6tnroi7c3onv5klf4e51as24n.apps.googleusercontent.com")
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(mContext, gso)

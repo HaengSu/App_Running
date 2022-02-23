@@ -39,6 +39,8 @@ class FragmentMain : Fragment() ,View.OnClickListener{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        navController = Navigation.findNavController(view)
+
         val user = FirebaseAuth.getInstance().currentUser
         val googleEmail =user?.email
         Log.d(TAG, "onViewCreated: googleEmail = ${googleEmail}")
