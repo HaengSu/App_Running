@@ -15,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
+import com.kakao.sdk.user.UserApiClient
 import org.techtown.app_running.R
 import org.techtown.app_running.databinding.FragmentMainBinding
 import org.techtown.app_running.view.MainActivity
@@ -53,11 +54,22 @@ class FragmentMain : Fragment() ,View.OnClickListener{
     override fun onClick(p0: View?) {
         when(p0?.id) {
             binding.logout.id -> {
+                //Google 로그아웃
                 val opt = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
                 val client = GoogleSignIn.getClient(mContext, opt)
                 client.signOut()
                 Log.d(TAG, "onClick: 로그아웃 성공")
                 navController.navigate(R.id.action_fragmentMain_to_fragmentLogin)
+
+                //kakao 로그아웃
+                UserApiClient.instance.logout { error ->
+                    if (error != null) {
+                        Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제됨", error)
+                    }
+                    else {
+                        Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제됨")
+                    }
+                }
             }
         }
     }
