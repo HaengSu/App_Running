@@ -1,8 +1,10 @@
 package org.techtown.app_running.view.fragment
 
+import android.app.Activity.MODE_PRIVATE
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -103,16 +105,21 @@ class FragmentLogin : Fragment(), View.OnClickListener {
         binding.findPassword.setOnClickListener(this)
         binding.google.setOnClickListener(this)
         binding.kakao.setOnClickListener(this)
+        binding.guestLogin.setOnClickListener(this)
+        binding.saveEamil.setOnClickListener(this)
+
+
     }
 
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
-            //회원가입 버튼
+//            회원가입 버튼
             binding.signUp.id -> {
                 navController.navigate(R.id.action_fragmentLogin_to_fragmentSignUp)
             }
-            //로그인 버튼
+
+//            기본 로그인 버튼
             binding.login.id -> {
                 var email = binding.email.text.toString()
                 var password = binding.password.text.toString()
@@ -126,10 +133,7 @@ class FragmentLogin : Fragment(), View.OnClickListener {
                                     mContext, "${email}님 반갑습니다", Toast.LENGTH_SHORT
                                 ).show()
                                 startLoding()
-
                                 val user = auth.currentUser
-//                                updateUI(user)
-
                             } else {
                                 Log.d(TAG, "signInWithEmail: false ")
                                 Toast.makeText(
@@ -148,15 +152,17 @@ class FragmentLogin : Fragment(), View.OnClickListener {
                         ).show()
                 }
             }
-            //비밀번호 찾기
+
+//            비밀번호 찾기
             binding.findPassword.id -> {
                 var dialog = CustomDialog(mContext)
                 dialog.showDialog()
             }
-            //구글회원가입
+//            구글로그인
             binding.google.id -> {
                 createIntent()
             }
+//            카카오 로그인
             binding.kakao.id -> {
 
                 //카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
@@ -180,7 +186,10 @@ class FragmentLogin : Fragment(), View.OnClickListener {
                             }
 
                             // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
-                            UserApiClient.instance.loginWithKakaoAccount(mContext, callback = callback)
+                            UserApiClient.instance.loginWithKakaoAccount(
+                                mContext,
+                                callback = callback
+                            )
                         } else if (token != null) {
                             Log.i(TAG, "카카오톡으로 로그인 성공 ${token.accessToken}")
                             startLoding()
@@ -190,7 +199,53 @@ class FragmentLogin : Fragment(), View.OnClickListener {
                     UserApiClient.instance.loginWithKakaoAccount(mContext, callback = callback)
                 }
             }
+//            게스트 로그인
+            binding.guestLogin.id -> {
+                val user = auth.currentUser
+                var userId: String
+
+                if (user != null) { // 이미 가입한 회원인 경우
+                    userId = user.uid // uid를 가져온다.
+                    Log.d(TAG, "게스트 로그인 : 이미 가입한 회원")
+                    startLoding()
+                } else {
+                    auth.signInAnonymously() // 익명으로 가입한다.
+                        .addOnCompleteListener(mContext) { task ->
+                            if (task.isSuccessful) { // 가입 성공한 경우
+                                userId = auth.currentUser!!.uid
+                                Log.d(TAG, "onClick: 게스트 입장한다~")
+                                startLoding()
+                            } else {
+                                // 가입 실패한 경우
+                                Log.d(TAG, "게스트 로그인: 게스트 입장 실패")
+                            }
+                        }
+                }
+            }
+//            자동로그인
+            binding.saveEamil.id -> {
+                if (binding.saveEamil.isChecked) {
+                    var id = binding.email.text.toString()
+                    var ps = binding.password.text.toString()
+
+                    saveData(id,ps)
+                } else {
+                    //지움
+                }
+
+            }
         }
+    }
+
+    fun saveData(email: String, ps: String) {
+        val prefs = mContext.getSharedPreferences("userProfile", MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = prefs.edit()
+        editor.putString("email", email)
+        Log.d(TAG, "saveData: email = ${prefs.getString("email", "").toString()}")
+
+        editor.putString("password", ps)
+        Log.d(TAG, "saveData: email = ${prefs.getString("password", "").toString()}")
+        editor.commit()
     }
 
     fun createIntent() {

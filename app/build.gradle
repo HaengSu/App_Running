@@ -64,4 +64,8 @@ dependencies {
 
 //    카카오톡 SDK
     implementation "com.kakao.sdk:v2-user:2.8.6" // 카카오 로그인
+
+//    뷰모델, 라이브 데이타
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0-alpha01"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.0-alpha01"
 }
