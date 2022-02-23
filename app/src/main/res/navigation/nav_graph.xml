@@ -26,8 +26,11 @@
         android:name="org.techtown.app_running.view.fragment.FragmentMain"
         android:label="FragmentMain" >
         <argument
-            android:name="userEmail"
-            app:argType="string" />
+            android:name="user"
+            app:argType="com.google.firebase.auth.FirebaseUser" />
+        <action
+            android:id="@+id/action_fragmentMain_to_fragmentLogin"
+            app:destination="@id/fragmentLogin" />
     </fragment>
 
     <fragment

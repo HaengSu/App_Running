@@ -90,51 +90,6 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--로딩화면(lottie)-->
-    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--        android:id="@+id/loding_screen"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="300dp"-->
-    <!--        android:layout_gravity="center_vertical"-->
-    <!--        android:background="@android:color/transparent"-->
-    <!--        android:visibility="gone"-->
-    <!--        app:layout_constraintBottom_toBottomOf="@+id/dialog_screen"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintHorizontal_bias="0.0"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        app:layout_constraintVertical_bias="0.0"-->
-    <!--        tools:visibility="visible">-->
-
-    <!--        <com.airbnb.lottie.LottieAnimationView-->
-    <!--            android:id="@+id/lottie"-->
-    <!--            android:layout_width="90dp"-->
-    <!--            android:layout_height="90dp"-->
-    <!--            android:layout_marginTop="72dp"-->
-    <!--            android:foregroundGravity="center_vertical"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            app:layout_constraintHorizontal_bias="0.498"-->
-    <!--            app:layout_constraintStart_toStartOf="parent"-->
-    <!--            app:layout_constraintTop_toTopOf="parent"-->
-    <!--            app:lottie_autoPlay="true"-->
-    <!--            app:lottie_loop="true"-->
-    <!--            app:lottie_rawRes="@raw/running" />-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:text="잠시만 기다려주세요..."-->
-    <!--            android:textSize="20dp"-->
-    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            app:layout_constraintHorizontal_bias="0.497"-->
-    <!--            app:layout_constraintStart_toStartOf="parent"-->
-    <!--            app:layout_constraintTop_toBottomOf="@+id/lottie"-->
-    <!--            app:layout_constraintVertical_bias="0.475" />-->
-
-    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
-
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
