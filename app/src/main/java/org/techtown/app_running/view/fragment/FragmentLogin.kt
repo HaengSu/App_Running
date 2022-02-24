@@ -33,12 +33,13 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.app_running.R
+import org.techtown.app_running.contract.LoginContract
 import org.techtown.app_running.databinding.FragmentLoginBinding
 import org.techtown.app_running.view.CustomDialog
 import org.techtown.app_running.view.MainActivity
 
 
-class FragmentLogin : Fragment(), View.OnClickListener {
+class FragmentLogin : Fragment(), View.OnClickListener,LoginContract.View {
     private val TAG: String = "FragmentLogin 로그"
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
@@ -48,10 +49,6 @@ class FragmentLogin : Fragment(), View.OnClickListener {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
 
-    //test
-    private lateinit var client: GoogleSignInClient
-
-
     //    Google Auth 인증에 성공하면 token 값으로 설정된다
     private var tokenId: String? = null
     private lateinit var launcher: ActivityResultLauncher<Intent>
@@ -59,6 +56,7 @@ class FragmentLogin : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
@@ -107,8 +105,6 @@ class FragmentLogin : Fragment(), View.OnClickListener {
         binding.kakao.setOnClickListener(this)
         binding.guestLogin.setOnClickListener(this)
         binding.saveEamil.setOnClickListener(this)
-
-
     }
 
 
@@ -284,6 +280,14 @@ class FragmentLogin : Fragment(), View.OnClickListener {
 //        var action = FragmentLoginDirections.actionFragmentLoginToFragmentMain(user)
 //        findNavController().navigate(action)
 //    }
+
+    override fun successSign() {
+        TODO("Not yet implemented")
+    }
+    override fun failSign() {
+        TODO("Not yet implemented")
+    }
+
 
     //로딩화면 구현
     private fun startLoding() {

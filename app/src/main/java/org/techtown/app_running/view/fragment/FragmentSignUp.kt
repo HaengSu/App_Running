@@ -2,6 +2,8 @@ package org.techtown.app_running.view.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +17,11 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import org.techtown.app_running.view.MainActivity
 import org.techtown.app_running.R
+import org.techtown.app_running.contract.LoginContract
 import org.techtown.app_running.databinding.FragmentSignUpBinding
+import org.techtown.app_running.presenter.LoginPresenter
 
-class FragmentSignUp : Fragment(), View.OnClickListener {
+class FragmentSignUp : Fragment(), View.OnClickListener,LoginContract.View {
     private val TAG: String = "FragmentSignUp 로그"
 
     private var _binding: FragmentSignUpBinding? = null
@@ -25,7 +29,8 @@ class FragmentSignUp : Fragment(), View.OnClickListener {
 
     private lateinit var mContext: MainActivity
     private lateinit var navController: NavController
-    private lateinit var auth: FirebaseAuth
+//    private lateinit var presenter: LoginPresenter
+    private lateinit var presenter: LoginContract.Presenter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,14 +43,15 @@ class FragmentSignUp : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView(view)
 
-        navController = Navigation.findNavController(view)
-
-        auth = Firebase.auth
-
-        //회원가입
         binding.create.setOnClickListener(this)
         binding.back.setOnClickListener(this)
+    }
+
+    fun initView(view : View) {
+        navController = Navigation.findNavController(view)
+        presenter = LoginPresenter(this)
     }
 
     override fun onAttach(context: Context) {
@@ -58,30 +64,35 @@ class FragmentSignUp : Fragment(), View.OnClickListener {
 
             //계정 생성
             binding.create.id -> {
-                var email = binding.email.text.toString()
-                var password = binding.password.text.toString()
-
-                if (email.isNotEmpty() && password.isNotEmpty()) {
-                    auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(mContext) { task ->
-                            if (task.isSuccessful) {
-                                Toast.makeText(mContext, "계정 생성 완료.", Toast.LENGTH_SHORT).show()
-                                Log.d(TAG, "onClick: email = ${email}")
-                                navController.navigate(R.id.action_fragmentSignUp_to_fragmentLogin)
-
-                            } else {
-                                Log.d(TAG, "onClick: 계정 생성 실패")
-                                Toast.makeText(mContext, "계정 생성에 실패하였습니다.", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                        }
-                }
+                val email = binding.email.text.toString()
+                val password = binding.password.text.toString()
+                presenter.setUserProfile(mContext,email,password)
             }
-
+//            뒤로가기
             binding.back.id -> {
                 navController.navigate(R.id.action_fragmentSignUp_to_fragmentLogin)
             }
         }
+    }
+//    회원가입 성공
+    override fun successSign() {
+        Toast.makeText(mContext, "계정 생성 완료.", Toast.LENGTH_SHORT).show()
+        startLoding()
+    }
+
+//    회원가입 실패
+    override fun failSign() {
+        Toast.makeText(mContext, "계정 생성에 실패하였습니다. 다시 시도해 주세요", Toast.LENGTH_SHORT).show()
+    }
+
+//    로딩화면
+    private fun startLoding() {
+        binding.signRoot.visibility = View.GONE
+        binding.signScreen.visibility = View.VISIBLE
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed({
+            navController.navigate(R.id.action_fragmentSignUp_to_fragmentMain)
+        }, 2500)
     }
 
     override fun onDestroy() {
