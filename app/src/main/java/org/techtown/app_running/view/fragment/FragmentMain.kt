@@ -6,27 +6,37 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
-import com.kakao.sdk.user.UserApiClient
-import org.techtown.app_running.R
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.techtown.app_running.contract.ContractMain
 import org.techtown.app_running.databinding.FragmentMainBinding
+import org.techtown.app_running.model.ModelWeather
+import org.techtown.app_running.presenter.ApiObject
+import org.techtown.app_running.presenter.ITEM
+import org.techtown.app_running.presenter.PresenterMain
+import org.techtown.app_running.presenter.WEATHER
 import org.techtown.app_running.view.MainActivity
+import retrofit2.Call
+import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
 
-class FragmentMain : Fragment() ,View.OnClickListener{
-    private val TAG : String = "FragmentMain 로그"
-    private var _binding : FragmentMainBinding ? = null
+class FragmentMain : Fragment(), View.OnClickListener, ContractMain.View {
+    private val TAG: String = "FragmentMain 로그"
+    private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-
+    private lateinit var mContext: MainActivity
     private lateinit var navController: NavController
-    private lateinit var mContext : MainActivity
+
+    var nx = "63"   //격자 x
+    var ny = "110"  //격자 y
+    var baseDate = ""  //조회 날짜
+    var baseTime = ""   //조회 시간
+    var type = "Json"   //조회 type
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,38 +50,93 @@ class FragmentMain : Fragment() ,View.OnClickListener{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initView(view)
+        setEvent()
+    }
+
+    fun initView(view: View) {
         navController = Navigation.findNavController(view)
+    }
 
-        val user = FirebaseAuth.getInstance().currentUser
-        val googleEmail =user?.email
-        Log.d(TAG, "onViewCreated: googleEmail = ${googleEmail}")
-        val photoUrl = user?.photoUrl
-        Log.d(TAG, "onViewCreated: photoUrl = ${photoUrl}")
-
-        binding.logout.setOnClickListener(this)
+    fun setEvent(){
+        setWeather(nx,ny)
     }
 
     override fun onClick(p0: View?) {
-        when(p0?.id) {
-            binding.logout.id -> {
-                //Google 로그아웃
-                val opt = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
-                val client = GoogleSignIn.getClient(mContext, opt)
-                client.signOut()
-                Log.d(TAG, "onClick: 로그아웃 성공")
-                navController.navigate(R.id.action_fragmentMain_to_fragmentLogin)
+        when (p0?.id) {
+        }
+    }
 
-                //kakao 로그아웃
-                UserApiClient.instance.logout { error ->
-                    if (error != null) {
-                        Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제됨", error)
+    private fun setWeather(nx : String, ny : String) {
+//        날짜 가져오기
+        val cal = Calendar.getInstance()
+        baseDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(cal.time)   // 현재 날짜
+        val hour = SimpleDateFormat("HH", Locale.getDefault()).format(cal.time)     // 현재 시간
+        val minute = SimpleDateFormat("HH",Locale.getDefault()).format(cal.time)    // 현재 분
+
+        baseTime = getBaseTime(hour,minute)
+
+        if (hour == "00" && baseTime == "2330"){
+            cal.add(Calendar.DATE, -1).toString()
+            baseDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(cal.time)
+        }
+//        날씨 가져오기
+        val call = ApiObject.retrofitService.GetWeather(60,1,type,baseDate,baseTime,nx, ny)
+
+        call.enqueue(object : retrofit2.Callback<WEATHER> {
+            override fun onResponse(call: Call<WEATHER>, response: Response<WEATHER>) {
+                if (response.isSuccessful){
+                    Log.d(TAG, "onResponse: 통신은 성공")
+                    val it : List<ITEM> = response.body()!!.response.body.items.item
+
+                    val weatherArr = arrayOf(ModelWeather(),ModelWeather(),ModelWeather(),ModelWeather(),ModelWeather(),ModelWeather())
+
+                    var index = 0
+                    val totalCount = response.body()!!.response.body.totalCount -1
+                    for (i in 0..totalCount) {
+                        index %= 6
+                        when(it[i].category){
+                            "PTY" -> weatherArr[index].rainType = it[i].fcstValue
+                            "REH" -> weatherArr[index].humidity = it[i].fcstValue
+                            "SKY" -> weatherArr[index].sky = it[i].fcstValue
+                            "T1H" -> weatherArr[index].temp = it[i].fcstValue
+                            else -> continue
+                        }
+                        index++
                     }
-                    else {
-                        Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제됨")
+
+                    for(i in 0..5){
+                        weatherArr[i].fcstTime = it[i].fcstTime
                     }
+                    Log.d(TAG, "보이면 성공: ${it[0].fcstDate}일${it[0].fcstTime}시 의 날씨 정보 입니다. 성공쓰!!")
                 }
             }
+
+            override fun onFailure(call: Call<WEATHER>, t: Throwable) {
+                Log.d(TAG, "onFailure: 응 실패...아오")
+            }
+        })
+
+    }
+
+    private fun getBaseTime(h : String, m : String) : String {
+        Log.d(TAG, "getBaseTime: 날짜 가져오기 진입 성공")
+        var result = ""
+        if (m.toInt() < 45) {
+            if (h == "00") {
+                result = "2330"
+            }else {
+                var resultH = h.toInt() - 1
+                if (resultH < 10) {
+                    result = "0" + resultH + "30"
+                } else {
+                    result = resultH.toString() + "30"
+                }
+            }
+        } else {
+            result = h + "30"
         }
+        return result
     }
 
     override fun onAttach(context: Context) {
@@ -86,7 +151,30 @@ class FragmentMain : Fragment() ,View.OnClickListener{
 }
 
 
+//로그아웃
+////Google 로그아웃
+//val opt = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+//val client = GoogleSignIn.getClient(mContext, opt)
+//client.signOut()
+//Log.d(TAG, "onClick: 로그아웃 성공")
+//navController.navigate(R.id.action_fragmentMain_to_fragmentLogin)
+//
+////kakao 로그아웃
+//UserApiClient.instance.logout { error ->
+//    if (error != null) {
+//        Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제됨", error)
+//    }
+//    else {
+//        Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제됨")
+//    }
+//}
 
+//이메일 비밀번호 불러오기
+//val user = FirebaseAuth.getInstance().currentUser
+//        val googleEmail =user?.email
+//        Log.d(TAG, "onViewCreated: googleEmail = ${googleEmail}")
+//        val photoUrl = user?.photoUrl
+//        Log.d(TAG, "onViewCreated: photoUrl = ${photoUrl}")
 
 
 

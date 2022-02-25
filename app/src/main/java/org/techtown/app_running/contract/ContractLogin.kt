@@ -2,7 +2,7 @@ package org.techtown.app_running.contract
 
 import android.content.Context
 
-interface LoginContract {
+interface ContractLogin {
     interface View {
         fun successSign()
         fun failSign()

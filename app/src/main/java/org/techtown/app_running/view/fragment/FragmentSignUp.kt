@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,16 +11,13 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import org.techtown.app_running.view.MainActivity
 import org.techtown.app_running.R
-import org.techtown.app_running.contract.LoginContract
+import org.techtown.app_running.contract.ContractLogin
 import org.techtown.app_running.databinding.FragmentSignUpBinding
-import org.techtown.app_running.presenter.LoginPresenter
+import org.techtown.app_running.presenter.PresenterLogin
 
-class FragmentSignUp : Fragment(), View.OnClickListener,LoginContract.View {
+class FragmentSignUp : Fragment(), View.OnClickListener,ContractLogin.View {
     private val TAG: String = "FragmentSignUp 로그"
 
     private var _binding: FragmentSignUpBinding? = null
@@ -29,8 +25,7 @@ class FragmentSignUp : Fragment(), View.OnClickListener,LoginContract.View {
 
     private lateinit var mContext: MainActivity
     private lateinit var navController: NavController
-//    private lateinit var presenter: LoginPresenter
-    private lateinit var presenter: LoginContract.Presenter
+    private lateinit var presenter: ContractLogin.Presenter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +46,7 @@ class FragmentSignUp : Fragment(), View.OnClickListener,LoginContract.View {
 
     fun initView(view : View) {
         navController = Navigation.findNavController(view)
-        presenter = LoginPresenter(this)
+        presenter = PresenterLogin(this)
     }
 
     override fun onAttach(context: Context) {

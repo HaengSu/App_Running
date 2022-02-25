@@ -2,13 +2,12 @@ package org.techtown.app_running.presenter
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import org.techtown.app_running.contract.LoginContract
+import org.techtown.app_running.contract.ContractLogin
 
-class LoginPresenter(private val view : LoginContract.View) : LoginContract.Presenter {
+class PresenterLogin(private val view : ContractLogin.View) : ContractLogin.Presenter {
 
     private val TAG : String = "LoginPresenter 로그"
     private lateinit var auth: FirebaseAuth
