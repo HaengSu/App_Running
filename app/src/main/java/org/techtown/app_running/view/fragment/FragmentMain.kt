@@ -24,19 +24,18 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FragmentMain : Fragment(), View.OnClickListener, ContractMain.View {
+class FragmentMain : Fragment(), View.OnClickListener {
     private val TAG: String = "FragmentMain 로그"
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
     private lateinit var mContext: MainActivity
     private lateinit var navController: NavController
 
-    var nx = "63"   //격자 x
-    var ny = "110"  //격자 y
-    var baseDate = ""  //조회 날짜
-    var baseTime = ""   //조회 시간
-    var type = "Json"   //조회 type
-
+    var nx = "55"   //격자 x
+    var ny = "127"  //격자 y
+    var baseDate = "20210510"  //조회 날짜
+    var baseTime = "1400"   //조회 시간
+    var type = "JSON"   //조회 type
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,8 +57,8 @@ class FragmentMain : Fragment(), View.OnClickListener, ContractMain.View {
         navController = Navigation.findNavController(view)
     }
 
-    fun setEvent(){
-        setWeather(nx,ny)
+    fun setEvent() {
+        setWeather(nx, ny)
     }
 
     override fun onClick(p0: View?) {
@@ -68,6 +67,7 @@ class FragmentMain : Fragment(), View.OnClickListener, ContractMain.View {
     }
 
     private fun setWeather(nx : String, ny : String) {
+        Log.d(TAG, "setWeather 시작")
 //        날짜 가져오기
         val cal = Calendar.getInstance()
         baseDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(cal.time)   // 현재 날짜
@@ -75,6 +75,7 @@ class FragmentMain : Fragment(), View.OnClickListener, ContractMain.View {
         val minute = SimpleDateFormat("HH",Locale.getDefault()).format(cal.time)    // 현재 분
 
         baseTime = getBaseTime(hour,minute)
+
 
         if (hour == "00" && baseTime == "2330"){
             cal.add(Calendar.DATE, -1).toString()
@@ -85,6 +86,7 @@ class FragmentMain : Fragment(), View.OnClickListener, ContractMain.View {
 
         call.enqueue(object : retrofit2.Callback<WEATHER> {
             override fun onResponse(call: Call<WEATHER>, response: Response<WEATHER>) {
+                Log.d(TAG, "onResponse: 통신 시작")
                 if (response.isSuccessful){
                     Log.d(TAG, "onResponse: 통신은 성공")
                     val it : List<ITEM> = response.body()!!.response.body.items.item
@@ -119,13 +121,15 @@ class FragmentMain : Fragment(), View.OnClickListener, ContractMain.View {
 
     }
 
-    private fun getBaseTime(h : String, m : String) : String {
+
+
+    private fun getBaseTime(h: String, m: String): String {
         Log.d(TAG, "getBaseTime: 날짜 가져오기 진입 성공")
         var result = ""
         if (m.toInt() < 45) {
             if (h == "00") {
                 result = "2330"
-            }else {
+            } else {
                 var resultH = h.toInt() - 1
                 if (resultH < 10) {
                     result = "0" + resultH + "30"
@@ -148,6 +152,7 @@ class FragmentMain : Fragment(), View.OnClickListener, ContractMain.View {
         _binding = null
         super.onDestroy()
     }
+
 }
 
 

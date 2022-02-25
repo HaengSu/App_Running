@@ -3,9 +3,10 @@ package org.techtown.app_running.view
 import android.app.Application
 import android.content.Context
 import com.kakao.sdk.common.KakaoSdk
+import org.techtown.app_running.BuildConfig
 import org.techtown.app_running.R
 
-class GlobalApplication : Application() {
+class KakaoApplication : Application() {
     companion object {
         var appContext : Context? = null
     }
@@ -13,6 +14,6 @@ class GlobalApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         appContext = this
-        KakaoSdk.init(this,getString(R.string.kakao_app_key))
+        KakaoSdk.init(this,BuildConfig.KAKAO_API_KEY)
     }
 }

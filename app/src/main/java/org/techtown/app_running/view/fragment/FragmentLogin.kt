@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -37,6 +38,7 @@ import org.techtown.app_running.contract.ContractLogin
 import org.techtown.app_running.databinding.FragmentLoginBinding
 import org.techtown.app_running.view.CustomDialog
 import org.techtown.app_running.view.MainActivity
+import java.util.jar.Manifest
 
 
 class FragmentLogin : Fragment(), View.OnClickListener,ContractLogin.View {
@@ -53,11 +55,6 @@ class FragmentLogin : Fragment(), View.OnClickListener,ContractLogin.View {
     private var tokenId: String? = null
     private lateinit var launcher: ActivityResultLauncher<Intent>
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,6 +88,7 @@ class FragmentLogin : Fragment(), View.OnClickListener,ContractLogin.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
+        setEvent()
     }
 
     fun initView(view: View) {
@@ -106,6 +104,13 @@ class FragmentLogin : Fragment(), View.OnClickListener,ContractLogin.View {
         binding.guestLogin.setOnClickListener(this)
         binding.saveEamil.setOnClickListener(this)
     }
+
+    fun setEvent(){
+        checkPermission()
+    }
+
+    fun checkPermission(){
+
 
 
     override fun onClick(p0: View?) {
@@ -247,7 +252,7 @@ class FragmentLogin : Fragment(), View.OnClickListener,ContractLogin.View {
     fun createIntent() {
         //구글로그인 초기설정
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("816172179738-ccj6vdo6tnroi7c3onv5klf4e51as24n.apps.googleusercontent.com")
+            .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(mContext, gso)

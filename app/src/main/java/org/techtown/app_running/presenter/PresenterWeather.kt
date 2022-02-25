@@ -1,5 +1,7 @@
 package org.techtown.app_running.presenter
 
+import android.util.Log
+import org.techtown.app_running.BuildConfig
 import org.techtown.app_running.R
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -8,7 +10,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface PresenterWeather {
-    @GET(R.string.weather_serviceKey.toString())
+    @GET("getUltraSrtFcst?serviceKey="+BuildConfig.WEATHER_SERVICEKEY)
 
     fun GetWeather(@Query("numOfRows") num_of_rows : Int,   // 한 페이지 경과 수
                    @Query("pageNo") page_no : Int,          // 페이지 번호
@@ -32,7 +34,7 @@ data class ITEM(val category : String, val fcstDate : String, val fcstTime : Str
 
 // retrofit을 사용하기 위한 빌더 생성
 private val retrofit = Retrofit.Builder()
-    .baseUrl("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst/")
+    .baseUrl("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/")
     .addConverterFactory(GsonConverterFactory.create())
     .build()
 
