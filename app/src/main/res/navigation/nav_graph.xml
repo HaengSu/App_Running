@@ -8,7 +8,7 @@
     <fragment
         tools:layout="@layout/fragment_login"
         android:id="@+id/fragmentLogin"
-        android:name="org.techtown.app_running.view.fragment.FragmentLogin"
+        android:name="org.techtown.app_running.view.fragment.FragmentSignIn"
         android:label="FragmentLogin" >
         <action
             android:id="@+id/action_fragmentLogin_to_fragmentMain"

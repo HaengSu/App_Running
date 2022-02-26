@@ -19,7 +19,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -33,21 +32,21 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.gun0912.tedpermission.*
-import com.gun0912.tedpermission.provider.TedPermissionProvider
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.TedPermission
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.app_running.R
-import org.techtown.app_running.contract.ContractLogin
+import org.techtown.app_running.contract.ContractSign
 import org.techtown.app_running.databinding.FragmentLoginBinding
+import org.techtown.app_running.presenter.PresenterSign
 import org.techtown.app_running.view.CustomDialog
 import org.techtown.app_running.view.MainActivity
-import java.util.jar.Manifest
 
 
-class FragmentLogin : Fragment(), View.OnClickListener, ContractLogin.View {
+class FragmentSignIn : Fragment(), View.OnClickListener, ContractSign.View {
     private val TAG: String = "FragmentLogin 로그"
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
@@ -55,11 +54,18 @@ class FragmentLogin : Fragment(), View.OnClickListener, ContractLogin.View {
     private lateinit var mContext: MainActivity
     private lateinit var navController: NavController
     private lateinit var auth: FirebaseAuth
+    private lateinit var presenter: ContractSign.Presenter
     private lateinit var googleSignInClient: GoogleSignInClient
-
-    //    Google Auth 인증에 성공하면 token 값으로 설정된다
-    private var tokenId: String? = null
     private lateinit var launcher: ActivityResultLauncher<Intent>
+    private var tokenId: String? = null     // Google Auth 인증에 성공하면 token 값으로 설정된다
+
+    override fun success() {
+        startLoding()
+    }
+
+    override fun fail() {
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,6 +74,7 @@ class FragmentLogin : Fragment(), View.OnClickListener, ContractLogin.View {
     ): View? {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
+        //구글 로그인2
         launcher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 Log.d(TAG, "onCreateView: result.resultCode = ${result}")
@@ -98,6 +105,7 @@ class FragmentLogin : Fragment(), View.OnClickListener, ContractLogin.View {
 
     fun initView(view: View) {
         navController = Navigation.findNavController(view)
+        presenter = PresenterSign(this)
 
         auth = Firebase.auth
         binding.guestLogin.setOnClickListener(this)
@@ -112,10 +120,10 @@ class FragmentLogin : Fragment(), View.OnClickListener, ContractLogin.View {
     }
 
     fun setEvent() {
-
         checkPermission()
     }
 
+    //    권한 요청
     fun checkPermission() {
 
         val permissionListener = object : PermissionListener {
@@ -144,11 +152,15 @@ class FragmentLogin : Fragment(), View.OnClickListener, ContractLogin.View {
 
         TedPermission.with(mContext).apply {
             setPermissionListener(permissionListener)
-            setRationaleMessage("권한을 허용해야 정확한 위치 측정이 가능합니다.")
-            setPermissions(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION)
+            setRationaleMessage("정확한 위치 확인을 위해 \n권한을 허용해 주세요.")
+            setDeniedMessage("권한을 거부하셨습니다. [앱 설정]->[권한] 항목에서 허용해주세요.")
+            setPermissions(
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            check()
         }
     }
-
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
@@ -159,26 +171,11 @@ class FragmentLogin : Fragment(), View.OnClickListener, ContractLogin.View {
 
 //            기본 로그인 버튼
             binding.login.id -> {
-                var email = binding.email.text.toString()
-                var password = binding.password.text.toString()
+                val email = binding.email.text.toString()
+                val password = binding.password.text.toString()
 
                 if (email.isNotEmpty() && password.isNotEmpty()) {
-                    auth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(mContext) { task ->
-                            if (task.isSuccessful) {
-                                Log.d(TAG, "signInWithEmail:success")
-                                Toast.makeText(
-                                    mContext, "${email}님 반갑습니다", Toast.LENGTH_SHORT
-                                ).show()
-                                startLoding()
-                                val user = auth.currentUser
-                            } else {
-                                Log.d(TAG, "signInWithEmail: false ")
-                                Toast.makeText(
-                                    mContext, "가입되지 않은 정보입니다.", Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
+                    presenter.setLoginData(mContext, email, password)
                 } else {
                     if (email.isEmpty()) {
                         Toast.makeText(
@@ -275,17 +272,6 @@ class FragmentLogin : Fragment(), View.OnClickListener, ContractLogin.View {
         }
     }
 
-    fun saveData(email: String, ps: String) {
-        val prefs = mContext.getSharedPreferences("userProfile", MODE_PRIVATE)
-        val editor: SharedPreferences.Editor = prefs.edit()
-        editor.putString("email", email)
-        Log.d(TAG, "saveData: email = ${prefs.getString("email", "").toString()}")
-
-        editor.putString("password", ps)
-        Log.d(TAG, "saveData: email = ${prefs.getString("password", "").toString()}")
-        editor.commit()
-    }
-
     fun createIntent() {
         //구글로그인 초기설정
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -299,6 +285,7 @@ class FragmentLogin : Fragment(), View.OnClickListener, ContractLogin.View {
 
         launcher.launch(signInIntent)
     }
+
 
     private fun firebaseAuthWithGoogle(idToken: String?) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
@@ -318,17 +305,15 @@ class FragmentLogin : Fragment(), View.OnClickListener, ContractLogin.View {
                 })
     }
 
-//    fun updateUI(user: FirebaseUser) {
-//        var action = FragmentLoginDirections.actionFragmentLoginToFragmentMain(user)
-//        findNavController().navigate(action)
-//    }
+    fun saveData(email: String, ps: String) {
+        val prefs = mContext.getSharedPreferences("userProfile", MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = prefs.edit()
+        editor.putString("email", email)
+        Log.d(TAG, "saveData: email = ${prefs.getString("email", "").toString()}")
 
-    override fun successSign() {
-        TODO("Not yet implemented")
-    }
-
-    override fun failSign() {
-        TODO("Not yet implemented")
+        editor.putString("password", ps)
+        Log.d(TAG, "saveData: email = ${prefs.getString("password", "").toString()}")
+        editor.commit()
     }
 
 
@@ -353,17 +338,10 @@ class FragmentLogin : Fragment(), View.OnClickListener, ContractLogin.View {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
+//    fun updateUI(user: FirebaseUser) {
+//        var action = FragmentLoginDirections.actionFragmentLoginToFragmentMain(user)
+//        findNavController().navigate(action)
+//    }
 
 
 

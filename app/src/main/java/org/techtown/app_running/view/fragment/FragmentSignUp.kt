@@ -13,11 +13,11 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import org.techtown.app_running.view.MainActivity
 import org.techtown.app_running.R
-import org.techtown.app_running.contract.ContractLogin
+import org.techtown.app_running.contract.ContractSign
 import org.techtown.app_running.databinding.FragmentSignUpBinding
-import org.techtown.app_running.presenter.PresenterLogin
+import org.techtown.app_running.presenter.PresenterSign
 
-class FragmentSignUp : Fragment(), View.OnClickListener,ContractLogin.View {
+class FragmentSignUp : Fragment(), View.OnClickListener,ContractSign.View {
     private val TAG: String = "FragmentSignUp 로그"
 
     private var _binding: FragmentSignUpBinding? = null
@@ -25,7 +25,7 @@ class FragmentSignUp : Fragment(), View.OnClickListener,ContractLogin.View {
 
     private lateinit var mContext: MainActivity
     private lateinit var navController: NavController
-    private lateinit var presenter: ContractLogin.Presenter
+    private lateinit var presenter: ContractSign.Presenter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +46,7 @@ class FragmentSignUp : Fragment(), View.OnClickListener,ContractLogin.View {
 
     fun initView(view : View) {
         navController = Navigation.findNavController(view)
-        presenter = PresenterLogin(this)
+        presenter = PresenterSign(this)
     }
 
     override fun onAttach(context: Context) {
@@ -61,7 +61,7 @@ class FragmentSignUp : Fragment(), View.OnClickListener,ContractLogin.View {
             binding.create.id -> {
                 val email = binding.email.text.toString()
                 val password = binding.password.text.toString()
-                presenter.setUserProfile(mContext,email,password)
+                presenter.setSignUpData(mContext,email,password)
             }
 //            뒤로가기
             binding.back.id -> {
@@ -69,14 +69,14 @@ class FragmentSignUp : Fragment(), View.OnClickListener,ContractLogin.View {
             }
         }
     }
-//    회원가입 성공
-    override fun successSign() {
+
+    override fun success() {
         Toast.makeText(mContext, "계정 생성 완료.", Toast.LENGTH_SHORT).show()
         startLoding()
+
     }
 
-//    회원가입 실패
-    override fun failSign() {
+    override fun fail() {
         Toast.makeText(mContext, "계정 생성에 실패하였습니다. 다시 시도해 주세요", Toast.LENGTH_SHORT).show()
     }
 
