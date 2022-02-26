@@ -2,12 +2,16 @@ package org.techtown.app_running.view.fragment
 
 import android.app.Activity.MODE_PRIVATE
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +33,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.gun0912.tedpermission.*
+import com.gun0912.tedpermission.provider.TedPermissionProvider
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -41,7 +47,7 @@ import org.techtown.app_running.view.MainActivity
 import java.util.jar.Manifest
 
 
-class FragmentLogin : Fragment(), View.OnClickListener,ContractLogin.View {
+class FragmentLogin : Fragment(), View.OnClickListener, ContractLogin.View {
     private val TAG: String = "FragmentLogin 로그"
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
@@ -54,7 +60,6 @@ class FragmentLogin : Fragment(), View.OnClickListener,ContractLogin.View {
     //    Google Auth 인증에 성공하면 token 값으로 설정된다
     private var tokenId: String? = null
     private lateinit var launcher: ActivityResultLauncher<Intent>
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -103,16 +108,46 @@ class FragmentLogin : Fragment(), View.OnClickListener,ContractLogin.View {
         binding.kakao.setOnClickListener(this)
         binding.guestLogin.setOnClickListener(this)
         binding.saveEamil.setOnClickListener(this)
+
     }
 
-    fun setEvent(){
+    fun setEvent() {
+
         checkPermission()
     }
 
-    fun checkPermission(){
+    fun checkPermission() {
 
+        val permissionListener = object : PermissionListener {
+            override fun onPermissionGranted() {
+                Toast.makeText(mContext, "권한이 허용 되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
+                AlertDialog.Builder(mContext)
+                    .setMessage("권한 거절로 인해 다수의 기능이 제한됩니다.")
+                    .setPositiveButton("권한 설정하러 가기") { dialog, which ->
+                        try {
+                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                .setData(Uri.parse("org.techtown.app_running.view.fragment"))
+                            startActivity(intent)
+                        } catch (e: ActivityNotFoundException) {
+                            e.printStackTrace()
+                            val intent = Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS)
+                            startActivity(intent)
+                        }
+                    }
+                    .show()
+                Toast.makeText(mContext, "권한 거부", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        TedPermission.with(mContext).apply {
+            setPermissionListener(permissionListener)
+            setRationaleMessage("권한을 허용해야 정확한 위치 측정이 가능합니다.")
+            setPermissions(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION)
+        }
     }
-
 
 
     override fun onClick(p0: View?) {
@@ -231,7 +266,7 @@ class FragmentLogin : Fragment(), View.OnClickListener,ContractLogin.View {
                     var id = binding.email.text.toString()
                     var ps = binding.password.text.toString()
 
-                    saveData(id,ps)
+                    saveData(id, ps)
                 } else {
                     //지움
                 }
@@ -291,6 +326,7 @@ class FragmentLogin : Fragment(), View.OnClickListener,ContractLogin.View {
     override fun successSign() {
         TODO("Not yet implemented")
     }
+
     override fun failSign() {
         TODO("Not yet implemented")
     }
