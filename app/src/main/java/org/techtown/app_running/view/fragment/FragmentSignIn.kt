@@ -286,7 +286,6 @@ class FragmentSignIn : Fragment(), View.OnClickListener, ContractSign.View {
         launcher.launch(signInIntent)
     }
 
-
     private fun firebaseAuthWithGoogle(idToken: String?) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
@@ -338,10 +337,6 @@ class FragmentSignIn : Fragment(), View.OnClickListener, ContractSign.View {
     }
 }
 
-//    fun updateUI(user: FirebaseUser) {
-//        var action = FragmentLoginDirections.actionFragmentLoginToFragmentMain(user)
-//        findNavController().navigate(action)
-//    }
 
 
 

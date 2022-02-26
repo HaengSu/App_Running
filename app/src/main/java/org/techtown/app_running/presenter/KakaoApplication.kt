@@ -1,10 +1,9 @@
-package org.techtown.app_running.view
+package org.techtown.app_running.presenter
 
 import android.app.Application
 import android.content.Context
 import com.kakao.sdk.common.KakaoSdk
 import org.techtown.app_running.BuildConfig
-import org.techtown.app_running.R
 
 class KakaoApplication : Application() {
     companion object {

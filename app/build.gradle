@@ -84,8 +84,8 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
-//    구글 맵
-    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+//    구글
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 
 //    권한설정
     implementation "io.github.ParkSangGwon:tedpermission:2.3.0"

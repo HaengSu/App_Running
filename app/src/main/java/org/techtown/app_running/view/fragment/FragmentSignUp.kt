@@ -73,7 +73,6 @@ class FragmentSignUp : Fragment(), View.OnClickListener,ContractSign.View {
     override fun success() {
         Toast.makeText(mContext, "계정 생성 완료.", Toast.LENGTH_SHORT).show()
         startLoding()
-
     }
 
     override fun fail() {

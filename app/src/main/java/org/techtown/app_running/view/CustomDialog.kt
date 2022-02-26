@@ -17,12 +17,10 @@ import org.techtown.app_running.R
 class CustomDialog(context: Context) : View.OnClickListener {
     private val TAG: String = "CustomDialog 로그"
     private val dialog = Dialog(context)
-
     private lateinit var cancel: ImageView
     private lateinit var send: Button
     private lateinit var email: EditText
     private lateinit var auth: FirebaseAuth
-
 
     fun showDialog() {
 
