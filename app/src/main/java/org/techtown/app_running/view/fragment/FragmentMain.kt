@@ -115,7 +115,7 @@ class FragmentMain : Fragment(), View.OnClickListener {
             }
 
             override fun onFailure(call: Call<WEATHER>, t: Throwable) {
-                Log.d(TAG, "onFailure: 응 실패...아오")
+                Log.d(TAG, "onFailure:${t.message.toString()} , ${call}")
             }
         })
 
@@ -124,7 +124,7 @@ class FragmentMain : Fragment(), View.OnClickListener {
 
 
     private fun getBaseTime(h: String, m: String): String {
-        Log.d(TAG, "getBaseTime: 날짜 가져오기 진입 성공")
+        Log.d(TAG, "getBaseTime: 날짜 변경")
         var result = ""
         if (m.toInt() < 45) {
             if (h == "00") {

@@ -111,6 +111,8 @@ class FragmentLogin : Fragment(), View.OnClickListener,ContractLogin.View {
 
     fun checkPermission(){
 
+    }
+
 
 
     override fun onClick(p0: View?) {
