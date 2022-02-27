@@ -1,12 +1,14 @@
 package org.techtown.app_running.presenter
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import org.techtown.app_running.contract.ContractSign
+import org.techtown.app_running.model.LoginSharedPreferences
 
 class PresenterSign(private val view: ContractSign.View) : AppCompatActivity(),
     ContractSign.Presenter {
@@ -45,7 +47,31 @@ class PresenterSign(private val view: ContractSign.View) : AppCompatActivity(),
                 }
             }
     }
+
+
+    override fun setUserProfile(context: Context, email: String, password: String) {
+
+        LoginSharedPreferences.apply {
+            setUserEmail(context, email)
+            setUserPass(context,password)
+        }
+        Log.d(
+            TAG, "setUserProfile: 자동저장 데이터 저장 완료 ${LoginSharedPreferences.getUserEmail(context)},${
+                LoginSharedPreferences.getUserPass(context)
+            }"
+        )
+
+        view.success()
+
+    }
+
+    override fun clearUserProfile(context: Context) {
+        var preference = LoginSharedPreferences.clearUser(context)
+        preference
+        Log.d(TAG, "clearUserProfile: 자동저장 데이터 삭제 완료")
+    }
 }
+
 
 //                        val user = auth.currentUser //회원 데이터 가져올때 사용
 

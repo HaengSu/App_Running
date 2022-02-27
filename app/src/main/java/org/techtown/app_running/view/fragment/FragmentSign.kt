@@ -40,15 +40,16 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.app_running.R
 import org.techtown.app_running.contract.ContractSign
-import org.techtown.app_running.databinding.FragmentLoginBinding
+import org.techtown.app_running.databinding.FragmentSignBinding
+import org.techtown.app_running.model.LoginSharedPreferences
 import org.techtown.app_running.presenter.PresenterSign
 import org.techtown.app_running.view.CustomDialog
 import org.techtown.app_running.view.MainActivity
 
 
-class FragmentSignIn : Fragment(), View.OnClickListener, ContractSign.View {
+class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
     private val TAG: String = "FragmentLogin 로그"
-    private var _binding: FragmentLoginBinding? = null
+    private var _binding: FragmentSignBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var mContext: MainActivity
@@ -64,6 +65,7 @@ class FragmentSignIn : Fragment(), View.OnClickListener, ContractSign.View {
     }
 
     override fun fail() {
+        Toast.makeText(mContext, "아이디와 비밀번호를 다 입력하셔야 합니다.", Toast.LENGTH_SHORT).show()
 
     }
 
@@ -72,7 +74,7 @@ class FragmentSignIn : Fragment(), View.OnClickListener, ContractSign.View {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentSignBinding.inflate(inflater, container, false)
 
         //구글 로그인2
         launcher =
@@ -115,12 +117,12 @@ class FragmentSignIn : Fragment(), View.OnClickListener, ContractSign.View {
         binding.google.setOnClickListener(this)
         binding.kakao.setOnClickListener(this)
         binding.guestLogin.setOnClickListener(this)
-        binding.saveEamil.setOnClickListener(this)
-
+        binding.autologin.setOnClickListener(this)
     }
 
     fun setEvent() {
         checkPermission()
+        loginCheck()
     }
 
     //    권한 요청
@@ -159,6 +161,12 @@ class FragmentSignIn : Fragment(), View.OnClickListener, ContractSign.View {
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             )
             check()
+        }
+    }
+
+    fun loginCheck() {
+        if(!(LoginSharedPreferences.getUserEmail(mContext).isNullOrBlank())){
+            startLoding()
         }
     }
 
@@ -258,14 +266,17 @@ class FragmentSignIn : Fragment(), View.OnClickListener, ContractSign.View {
                 }
             }
 //            자동로그인
-            binding.saveEamil.id -> {
-                if (binding.saveEamil.isChecked) {
-                    var id = binding.email.text.toString()
-                    var ps = binding.password.text.toString()
-
-                    saveData(id, ps)
+            binding.autologin.id -> {
+                if (binding.autologin.isChecked) {
+                    if (binding.email.text.isNullOrBlank() || binding.password.text.isNullOrBlank()) {
+                        Toast.makeText(mContext, "아이디와 비밀번호를 다 입력해주세요!!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        var id = binding.email.text.toString()
+                        var ps = binding.password.text.toString()
+                        presenter.setUserProfile(mContext, id, ps)
+                    }
                 } else {
-                    //지움
+                    presenter.clearUserProfile(mContext)
                 }
 
             }

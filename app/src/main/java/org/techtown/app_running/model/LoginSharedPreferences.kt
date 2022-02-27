@@ -13,7 +13,7 @@ object LoginSharedPreferences {
         editor.apply()
     }
 
-    fun getUserId(context: Context): String {
+    fun getUserEmail(context: Context): String {
         val prefs : SharedPreferences = context.getSharedPreferences(USER_PROFILE, Context.MODE_PRIVATE)
         return prefs.getString("email", "").toString()
     }

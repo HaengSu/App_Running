@@ -6,9 +6,9 @@
     app:startDestination="@id/fragmentLogin">
 
     <fragment
-        tools:layout="@layout/fragment_login"
+        tools:layout="@layout/fragment_Sign"
         android:id="@+id/fragmentLogin"
-        android:name="org.techtown.app_running.view.fragment.FragmentSignIn"
+        android:name="org.techtown.app_running.view.fragment.FragmentSign"
         android:label="FragmentLogin" >
         <action
             android:id="@+id/action_fragmentLogin_to_fragmentMain"

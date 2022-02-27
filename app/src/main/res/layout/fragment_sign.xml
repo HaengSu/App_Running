@@ -5,11 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--로딩화면(lottie)-->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/loginRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/textView"
@@ -25,12 +32,12 @@
 
         <EditText
             android:id="@+id/email"
+            style="@style/BasicStyle"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginStart="80dp"
             android:layout_marginTop="40dp"
             android:layout_marginEnd="80dp"
-            style="@style/BasicStyle"
             android:hint="Email"
             android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,12 +48,12 @@
 
         <EditText
             android:id="@+id/password"
+            style="@style/BasicStyle"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginStart="80dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="80dp"
-            style="@style/BasicStyle"
             android:hint="Password"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +72,7 @@
             app:layout_constraintEnd_toStartOf="@+id/signUp"
             app:layout_constraintHorizontal_bias="0.058"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/saveEamil" />
+            app:layout_constraintTop_toBottomOf="@+id/autologin" />
 
         <Button
             android:id="@+id/signUp"
@@ -144,7 +151,7 @@
             app:layout_constraintTop_toBottomOf="@+id/guestLogin" />
 
         <CheckBox
-            android:id="@+id/saveEamil"
+            android:id="@+id/autologin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
@@ -155,7 +162,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!--로딩화면(lottie)-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lodingScreen"
         android:layout_width="match_parent"

@@ -2,7 +2,6 @@ package org.techtown.app_running.view.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,17 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.techtown.app_running.contract.ContractMain
 import org.techtown.app_running.databinding.FragmentMainBinding
 import org.techtown.app_running.model.ModelWeather
 import org.techtown.app_running.presenter.*
 import org.techtown.app_running.view.MainActivity
-import retrofit2.Call
-import retrofit2.Response
-import java.text.SimpleDateFormat
 import java.util.*
 
 class FragmentMain : Fragment(), View.OnClickListener, ContractMain.View {
