@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import org.techtown.app_running.R
 import org.techtown.app_running.databinding.FragmentAloneSettingBinding
 import org.techtown.app_running.view.MainActivity
 
@@ -39,10 +40,22 @@ class FragmentAloneSetting : Fragment(), View.OnClickListener {
     fun initView(view: View) {
         navController = Navigation.findNavController(view)
 
-        //spinner 아이템
-        val items = arrayOf("0Km", "1Km", "2Km", "3Km", "4Km", "5Km", "6Km", "7Km", "8Km", "9Km", "10Km", "21.0975Km (Half marathon)", "42.1295Km (Marathon)")
-        val sAdapter = ArrayAdapter(mContext, android.R.layout.simple_spinner_dropdown_item, items)
-        binding.spinnerKm.adapter = sAdapter
+        val kAdapter = ArrayAdapter(
+            mContext,
+            android.R.layout.simple_spinner_dropdown_item,
+            resources.getStringArray(R.array.km)
+        )
+        val cAdapter =
+            ArrayAdapter(
+                mContext,
+                android.R.layout.simple_spinner_dropdown_item,
+                resources.getStringArray(R.array.count)
+            )
+
+        binding.apply {
+            spinnerKm.adapter = kAdapter
+            spinnerCount.adapter = cAdapter
+        }
     }
 
     fun setEvent() {
@@ -52,7 +65,14 @@ class FragmentAloneSetting : Fragment(), View.OnClickListener {
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
+            }
+        }
+
+        binding.spinnerCount.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
             }
         }
     }

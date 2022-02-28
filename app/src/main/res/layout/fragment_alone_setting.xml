@@ -57,6 +57,7 @@
             android:textSize="24dp" />
 
         <Spinner
+            android:id="@+id/spinnerCount"
             android:layout_width="wrap_content"
             android:layout_height="30dp" />
 
