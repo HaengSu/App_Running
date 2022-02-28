@@ -2,6 +2,7 @@ package org.techtown.app_running.view.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.techtown.app_running.R
 import org.techtown.app_running.contract.ContractMain
 import org.techtown.app_running.databinding.FragmentMainBinding
 import org.techtown.app_running.model.ModelWeather
@@ -45,6 +47,8 @@ class FragmentMain : Fragment(), View.OnClickListener, ContractMain.View {
         presenter = PresenterMain(this)
         navController = Navigation.findNavController(view)
 
+        binding.runAlone.setOnClickListener(this)
+
     }
 
     fun setEvent() {
@@ -59,6 +63,10 @@ class FragmentMain : Fragment(), View.OnClickListener, ContractMain.View {
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
+
+            binding.runAlone.id -> {
+                navController.navigate(R.id.action_fragmentMain_to_fragmentAlone)
+            }
         }
     }
 

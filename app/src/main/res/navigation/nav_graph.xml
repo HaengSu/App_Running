@@ -31,6 +31,10 @@
         <action
             android:id="@+id/action_fragmentMain_to_fragmentLogin"
             app:destination="@id/fragmentLogin" />
+        <action
+            android:id="@+id/action_fragmentMain_to_fragmentAlone"
+            app:destination="@id/fragmentAlone"
+            app:enterAnim="@anim/enter_left" />
     </fragment>
 
     <fragment
@@ -47,4 +51,10 @@
             app:enterAnim="@anim/enter_down"
             app:exitAnim="@anim/exit_down" />
     </fragment>
+
+    <fragment
+        tools:layout="@layout/fragment_alone_setting"
+        android:id="@+id/fragmentAlone"
+        android:name="org.techtown.app_running.view.fragment.FragmentAloneSetting"
+        android:label="FragmentAlone" />
 </navigation>

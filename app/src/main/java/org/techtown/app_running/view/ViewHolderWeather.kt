@@ -12,7 +12,7 @@ class ViewHolderWeather(val binding : RecyclerviewWeatherItemBinding) : Recycler
             time.text = item.fcstTime
             sky.text = getSky(item.sky)
             rain.text = "강수량: "+getRain(item.rainType)
-            humidity.text = item.humidity+"%"
+            humidity.text = "습도: "+item.humidity+"%"
             temp.text = "온도: "+item.temp+"℃"
             condition.text = getCondition(item.temp.toInt())
         }

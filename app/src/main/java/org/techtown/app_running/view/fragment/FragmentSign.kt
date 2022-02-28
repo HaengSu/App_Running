@@ -66,7 +66,6 @@ class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
 
     override fun fail() {
         Toast.makeText(mContext, "아이디와 비밀번호를 다 입력하셔야 합니다.", Toast.LENGTH_SHORT).show()
-
     }
 
     override fun onCreateView(
@@ -278,7 +277,6 @@ class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
                 } else {
                     presenter.clearUserProfile(mContext)
                 }
-
             }
         }
     }
