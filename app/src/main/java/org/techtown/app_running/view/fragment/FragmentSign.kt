@@ -109,14 +109,17 @@ class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
         presenter = PresenterSign(this)
 
         auth = Firebase.auth
-        binding.guestLogin.setOnClickListener(this)
-        binding.signUp.setOnClickListener(this)
-        binding.login.setOnClickListener(this)
-        binding.findPassword.setOnClickListener(this)
-        binding.google.setOnClickListener(this)
-        binding.kakao.setOnClickListener(this)
-        binding.guestLogin.setOnClickListener(this)
-        binding.autologin.setOnClickListener(this)
+
+        binding.apply {
+            guestLogin.setOnClickListener(this@FragmentSign)
+            signUp.setOnClickListener(this@FragmentSign)
+            login.setOnClickListener(this@FragmentSign)
+            findPassword.setOnClickListener(this@FragmentSign)
+            google.setOnClickListener(this@FragmentSign)
+            kakao.setOnClickListener(this@FragmentSign)
+            guestLogin.setOnClickListener(this@FragmentSign)
+            autologin.setOnClickListener(this@FragmentSign)
+        }
     }
 
     fun setEvent() {
@@ -164,7 +167,7 @@ class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
     }
 
     fun loginCheck() {
-        if(!(LoginSharedPreferences.getUserEmail(mContext).isNullOrBlank())){
+        if (!(LoginSharedPreferences.getUserEmail(mContext).isNullOrBlank())) {
             startLoding()
         }
     }
@@ -273,6 +276,7 @@ class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
                         var id = binding.email.text.toString()
                         var ps = binding.password.text.toString()
                         presenter.setUserProfile(mContext, id, ps)
+                        Toast.makeText(mContext, "자동로그인 기능이 설정되었습니다.", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     presenter.clearUserProfile(mContext)

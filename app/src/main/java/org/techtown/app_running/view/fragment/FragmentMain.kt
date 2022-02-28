@@ -2,7 +2,6 @@ package org.techtown.app_running.view.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +25,9 @@ class FragmentMain : Fragment(), View.OnClickListener, ContractMain.View {
     private lateinit var navController: NavController
     private lateinit var presenter: ContractMain.Presenter
 
+    override fun successLogout() {
+        navController.navigate(R.id.action_fragmentMain_to_fragmentLogin)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,18 +49,23 @@ class FragmentMain : Fragment(), View.OnClickListener, ContractMain.View {
         presenter = PresenterMain(this)
         navController = Navigation.findNavController(view)
 
-        binding.runAlone.setOnClickListener(this)
-
+        binding.apply {
+            runAlone.setOnClickListener(this@FragmentMain)
+            binding.logout.setOnClickListener(this@FragmentMain)
+        }
     }
 
     fun setEvent() {
         presenter.requestLocation(mContext)
     }
 
-    override fun success(arr: Array<ModelWeather>) {
-        binding.recyclerviewWeather.layoutManager =
-            LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerviewWeather.adapter = AdapterWeather(arr)
+    override fun successWeather(arr: Array<ModelWeather>) {
+        binding.apply {
+            recyclerviewWeather.layoutManager =
+                LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
+
+            recyclerviewWeather.adapter = AdapterWeather(arr)
+        }
     }
 
     override fun onClick(p0: View?) {
@@ -66,6 +73,9 @@ class FragmentMain : Fragment(), View.OnClickListener, ContractMain.View {
 
             binding.runAlone.id -> {
                 navController.navigate(R.id.action_fragmentMain_to_fragmentAlone)
+            }
+            binding.logout.id -> {
+                presenter.clearUserProfile(mContext)
             }
         }
     }
@@ -79,7 +89,6 @@ class FragmentMain : Fragment(), View.OnClickListener, ContractMain.View {
         _binding = null
         super.onDestroy()
     }
-
 }
 
 

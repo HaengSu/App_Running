@@ -17,7 +17,7 @@ import org.techtown.app_running.contract.ContractSign
 import org.techtown.app_running.databinding.FragmentSignUpBinding
 import org.techtown.app_running.presenter.PresenterSign
 
-class FragmentSignUp : Fragment(), View.OnClickListener,ContractSign.View {
+class FragmentSignUp : Fragment(), View.OnClickListener, ContractSign.View {
     private val TAG: String = "FragmentSignUp 로그"
 
     private var _binding: FragmentSignUpBinding? = null
@@ -40,11 +40,14 @@ class FragmentSignUp : Fragment(), View.OnClickListener,ContractSign.View {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
 
-        binding.create.setOnClickListener(this)
-        binding.back.setOnClickListener(this)
+        binding.apply {
+            create.setOnClickListener(this@FragmentSignUp)
+            back.setOnClickListener(this@FragmentSignUp)
+        }
+
     }
 
-    fun initView(view : View) {
+    fun initView(view: View) {
         navController = Navigation.findNavController(view)
         presenter = PresenterSign(this)
     }
@@ -61,7 +64,7 @@ class FragmentSignUp : Fragment(), View.OnClickListener,ContractSign.View {
             binding.create.id -> {
                 val email = binding.email.text.toString()
                 val password = binding.password.text.toString()
-                presenter.setSignUpData(mContext,email,password)
+                presenter.setSignUpData(mContext, email, password)
             }
 //            뒤로가기
             binding.back.id -> {
@@ -79,7 +82,7 @@ class FragmentSignUp : Fragment(), View.OnClickListener,ContractSign.View {
         Toast.makeText(mContext, "계정 생성에 실패하였습니다. 다시 시도해 주세요", Toast.LENGTH_SHORT).show()
     }
 
-//    로딩화면
+    //    로딩화면
     private fun startLoding() {
         binding.signRoot.visibility = View.GONE
         binding.signScreen.visibility = View.VISIBLE

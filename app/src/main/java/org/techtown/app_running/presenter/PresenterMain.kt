@@ -10,6 +10,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import org.techtown.app_running.contract.ContractMain
+import org.techtown.app_running.model.LoginSharedPreferences
 import org.techtown.app_running.model.ModelGetCurrent
 import org.techtown.app_running.model.ModelWeather
 import retrofit2.Call
@@ -76,7 +77,7 @@ class PresenterMain(private val view: ContractMain.View) : AppCompatActivity(), 
                     for (i in 0..5) {
                         weatherArr[i].fcstTime = it[i].fcstTime
                     }
-                    view.success(weatherArr)
+                    view.successWeather(weatherArr)
                 }
             }
 
@@ -126,6 +127,12 @@ class PresenterMain(private val view: ContractMain.View) : AppCompatActivity(), 
         }
     }
 
+    override fun clearUserProfile(context: Context) {
+        var preference = LoginSharedPreferences.clearUser(context)
+        preference
+        Log.d(TAG, "clearUserProfile: 자동저장 데이터 삭제 완료")
+        view.successLogout()
+    }
 }
 
 

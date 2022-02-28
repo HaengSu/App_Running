@@ -7,10 +7,12 @@ import org.techtown.app_running.model.ModelWeather
 interface ContractMain {
 
     interface View {
-        fun success(arr : Array<ModelWeather>)
+        fun successWeather(arr : Array<ModelWeather>)
+        fun successLogout()
     }
 
     interface Presenter {
         fun requestLocation(context: Context)
+        fun clearUserProfile(context: Context)
     }
 }

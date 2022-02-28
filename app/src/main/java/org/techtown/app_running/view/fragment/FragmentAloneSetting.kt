@@ -55,6 +55,8 @@ class FragmentAloneSetting : Fragment(), View.OnClickListener {
         binding.apply {
             spinnerKm.adapter = kAdapter
             spinnerCount.adapter = cAdapter
+
+            ready.setOnClickListener(this@FragmentAloneSetting)
         }
     }
 
@@ -78,7 +80,11 @@ class FragmentAloneSetting : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(p0: View?) {
-
+        when(p0?.id) {
+            binding.ready.id -> {
+                navController.navigate(R.id.action_fragmentAloneSetting_to_fragmentAloneReady)
+            }
+        }
     }
 
     override fun onAttach(context: Context) {

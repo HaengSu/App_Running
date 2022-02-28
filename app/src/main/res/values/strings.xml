@@ -17,4 +17,36 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="warm_up">
+         1. 손,발목 돌리며 풀어주기\n
+        2. 어깨 돌리기 앞-뒤 합쳐서 15초씩\n
+        3. 짧은 햄스트링 스트레칭 15초씩\n
+        4. 긴 햄스트링 스트레칭 15초씩\n
+        5. 앞으로 햄스트링 15초 + 왼 오른쪽 15초씩\n
+        6. 발꼬아 햄스트링 15초씩\n
+        7. 짧은 런지자세로 종아리와 장요근 스트레칭 15초씩\n
+        8. 긴 런지자세로 종아리와 장요근 스트레칭 15초씩\n
+        9. 하이니 스트레칭 15초씩\n
+        10. 발목잡고 뒤로 뻗어 대퇴근 스트레칭 15초씩\n
+        11. 발목잡고 골반 스트레칭 15초씩\n
+        12. 무릎돌리기 15초\n
+        13. 무릎 안,밖 회전 15초\n
+        14. 허리돌리기 15초\n
+        15. 제자리뛰기 15초 </string>
+
 </resources>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
