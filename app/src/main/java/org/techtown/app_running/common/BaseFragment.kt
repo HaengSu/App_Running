@@ -12,7 +12,7 @@ import androidx.navigation.Navigation
 import androidx.viewbinding.ViewBinding
 import org.techtown.app_running.view.MainActivity
 
-abstract class BaseFragment<B : ViewBinding> : Fragment() {
+abstract class BaseFragment<B : ViewBinding> : Fragment(), View.OnClickListener {
     private var _binding : B? = null
     protected val binding get() = _binding!!
     protected lateinit var navController: NavController

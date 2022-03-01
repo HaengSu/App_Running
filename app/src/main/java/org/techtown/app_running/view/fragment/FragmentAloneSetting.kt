@@ -1,11 +1,15 @@
 package org.techtown.app_running.view.fragment
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.activity.OnBackPressedCallback
+import androidx.navigation.fragment.findNavController
 import org.techtown.app_running.R
 import org.techtown.app_running.common.BaseFragment
 import org.techtown.app_running.databinding.FragmentAloneSettingBinding
@@ -51,12 +55,14 @@ class FragmentAloneSetting : BaseFragment<FragmentAloneSettingBinding>(), View.O
         binding.spinnerKm.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
             }
+
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
         }
         binding.spinnerCount.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
             }
+
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
         }
@@ -65,9 +71,24 @@ class FragmentAloneSetting : BaseFragment<FragmentAloneSettingBinding>(), View.O
     override fun onClick(p0: View?) {
         when (p0?.id) {
             binding.ready.id -> {
-                navController.navigate(R.id.action_fragmentAloneSetting_to_fragmentAloneReady)
+                var km = binding.spinnerKm.selectedItem.toString()
+                Log.d(TAG, "onClick: km = ${km}")
+                var count = binding.spinnerCount.selectedItem.toString()
+                Log.d(TAG, "onClick: count = ${count}")
+
+                if (km.equals("0Km")) {
+                    showToast("거리 설정해 주세요.")
+                } else {
+                    sendData(km, count)
+                }
             }
         }
+    }
+
+    fun sendData(km: String, count: String) {
+        val action =
+            FragmentAloneSettingDirections.actionFragmentAloneSettingToFragmentAloneReady(km, count)
+        findNavController().navigate(action)
     }
 }
 

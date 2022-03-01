@@ -56,6 +56,7 @@
         android:id="@+id/fragmentAloneSetting"
         android:name="org.techtown.app_running.view.fragment.FragmentAloneSetting"
         android:label="FragmentAloneSetting" >
+
         <action
             android:id="@+id/action_fragmentAloneSetting_to_fragmentAloneReady"
             app:destination="@id/fragmentAloneReady"
@@ -65,5 +66,27 @@
         tools:layout="@layout/fragment_alone_ready"
         android:id="@+id/fragmentAloneReady"
         android:name="org.techtown.app_running.view.fragment.FragmentAloneReady"
-        android:label="FragmentAloneReady" />
+        android:label="FragmentAloneReady" >
+        <action
+            android:id="@+id/action_fragmentAloneReady_to_fragmentCommonCount"
+            app:destination="@id/fragmentCommonCount" />
+        <argument
+            android:name="km"
+            app:argType="string" />
+        <argument
+            android:name="count"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/fragment_common_count"
+        android:id="@+id/fragmentCommonCount"
+        android:name="org.techtown.app_running.view.fragment.FragmentCommonCount"
+        android:label="FragmentCommonCount" >
+        <argument android:name="count"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
+
+    <action android:id="@+id/action_global_fragmentAloneSetting"
+        app:destination="@id/fragmentAloneSetting"/>
 </navigation>
