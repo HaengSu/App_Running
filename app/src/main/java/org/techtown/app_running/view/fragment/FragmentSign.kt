@@ -1,12 +1,9 @@
 package org.techtown.app_running.view.fragment
 
-import android.app.Activity.MODE_PRIVATE
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -16,12 +13,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -34,26 +27,18 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.model.ClientError
-import com.kakao.sdk.common.model.ClientErrorCause
-import com.kakao.sdk.user.UserApiClient
 import org.techtown.app_running.R
+import org.techtown.app_running.common.BaseFragment
 import org.techtown.app_running.contract.ContractSign
 import org.techtown.app_running.databinding.FragmentSignBinding
 import org.techtown.app_running.model.LoginSharedPreferences
 import org.techtown.app_running.presenter.PresenterSign
 import org.techtown.app_running.view.CustomDialog
-import org.techtown.app_running.view.MainActivity
 
 
-class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
+class FragmentSign : BaseFragment<FragmentSignBinding>(), View.OnClickListener, ContractSign.View {
     private val TAG: String = "FragmentLogin 로그"
-    private var _binding: FragmentSignBinding? = null
-    private val binding get() = _binding!!
 
-    private lateinit var mContext: MainActivity
-    private lateinit var navController: NavController
     private lateinit var auth: FirebaseAuth
     private lateinit var presenter: ContractSign.Presenter
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -65,17 +50,15 @@ class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
     }
 
     override fun fail() {
-        Toast.makeText(mContext, "아이디와 비밀번호를 다 입력하셔야 합니다.", Toast.LENGTH_SHORT).show()
+        showToast("아이디와 비밀번호를 다 입력하셔야 합니다.")
     }
 
-    override fun onCreateView(
+    override fun getFragmentViewBinding(
         inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentSignBinding.inflate(inflater, container, false)
+        container: ViewGroup?
+    ): FragmentSignBinding {
 
-        //구글 로그인2
+//        구글 로그인2
         launcher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 Log.d(TAG, "onCreateView: result.resultCode = ${result}")
@@ -94,8 +77,7 @@ class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
                     Log.d(TAG, "onViewCreated: 로그인 접속 실패")
                 }
             }
-
-        return binding.root
+        return FragmentSignBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -104,8 +86,7 @@ class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
         setEvent()
     }
 
-    fun initView(view: View) {
-        navController = Navigation.findNavController(view)
+    override fun initView(view: View) {
         presenter = PresenterSign(this)
 
         auth = Firebase.auth
@@ -122,17 +103,18 @@ class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
         }
     }
 
-    fun setEvent() {
+    override fun setEvent() {
         checkPermission()
         loginCheck()
     }
+
 
     //    권한 요청
     fun checkPermission() {
 
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
-                Toast.makeText(mContext, "권한이 허용 되었습니다.", Toast.LENGTH_SHORT).show()
+                showToast("권한이 허용 되었습니다.")
             }
 
             override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
@@ -150,7 +132,7 @@ class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
                         }
                     }
                     .show()
-                Toast.makeText(mContext, "권한 거부", Toast.LENGTH_SHORT).show()
+                showToast("권한 거부")
             }
         }
 
@@ -183,18 +165,13 @@ class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
             binding.login.id -> {
                 val email = binding.email.text.toString()
                 val password = binding.password.text.toString()
-
                 if (email.isNotEmpty() && password.isNotEmpty()) {
                     presenter.setLoginData(mContext, email, password)
                 } else {
                     if (email.isEmpty()) {
-                        Toast.makeText(
-                            mContext, "Email을 입력해 주세요.", Toast.LENGTH_SHORT
-                        ).show()
+                        showToast("Email을 입력해 주세요.")
                     } else
-                        Toast.makeText(
-                            mContext, "Password를 입력해 주세요.", Toast.LENGTH_SHORT
-                        ).show()
+                        showToast("Password를 입력해 주세요.")
                 }
             }
 
@@ -203,80 +180,32 @@ class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
                 var dialog = CustomDialog(mContext)
                 dialog.showDialog()
             }
+
 //            구글로그인
             binding.google.id -> {
                 createIntent()
             }
+
 //            카카오 로그인
             binding.kakao.id -> {
-
-                //카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
-                val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-                    if (error != null) {
-                        Log.e(TAG, "카카오계정으로 로그인 실패", error)
-                    } else if (token != null) {
-                        Log.i(TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
-                    }
-                }
-
-                if (UserApiClient.instance.isKakaoTalkLoginAvailable(mContext)) {
-                    UserApiClient.instance.loginWithKakaoTalk(mContext) { token, error ->
-                        if (error != null) {
-                            Log.e(TAG, "카카오톡으로 로그인 실패", error)
-
-                            // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
-                            // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
-                            if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-                                return@loginWithKakaoTalk
-                            }
-
-                            // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
-                            UserApiClient.instance.loginWithKakaoAccount(
-                                mContext,
-                                callback = callback
-                            )
-                        } else if (token != null) {
-                            Log.i(TAG, "카카오톡으로 로그인 성공 ${token.accessToken}")
-                            startLoding()
-                        }
-                    }
-                } else {
-                    UserApiClient.instance.loginWithKakaoAccount(mContext, callback = callback)
-                }
+                presenter.kakaoLogin(mContext)
             }
+
 //            게스트 로그인
             binding.guestLogin.id -> {
-                val user = auth.currentUser
-                var userId: String
-
-                if (user != null) { // 이미 가입한 회원인 경우
-                    userId = user.uid // uid를 가져온다.
-                    Log.d(TAG, "게스트 로그인 : 이미 가입한 회원")
-                    startLoding()
-                } else {
-                    auth.signInAnonymously() // 익명으로 가입한다.
-                        .addOnCompleteListener(mContext) { task ->
-                            if (task.isSuccessful) { // 가입 성공한 경우
-                                userId = auth.currentUser!!.uid
-                                Log.d(TAG, "onClick: 게스트 입장한다~")
-                                startLoding()
-                            } else {
-                                // 가입 실패한 경우
-                                Log.d(TAG, "게스트 로그인: 게스트 입장 실패")
-                            }
-                        }
-                }
+                presenter.guestLogin()
             }
+
 //            자동로그인
             binding.autologin.id -> {
                 if (binding.autologin.isChecked) {
                     if (binding.email.text.isNullOrBlank() || binding.password.text.isNullOrBlank()) {
-                        Toast.makeText(mContext, "아이디와 비밀번호를 다 입력해주세요!!", Toast.LENGTH_SHORT).show()
+                        showToast("아이디와 비밀번호를 다 입력해주세요!!")
                     } else {
                         var id = binding.email.text.toString()
                         var ps = binding.password.text.toString()
                         presenter.setUserProfile(mContext, id, ps)
-                        Toast.makeText(mContext, "자동로그인 기능이 설정되었습니다.", Toast.LENGTH_SHORT).show()
+                        showToast("자동로그인 기능이 설정되었습니다.")
                     }
                 } else {
                     presenter.clearUserProfile(mContext)
@@ -295,39 +224,23 @@ class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
 
         //구글로그인 화면 intent
         val signInIntent = googleSignInClient.signInIntent
-
         launcher.launch(signInIntent)
     }
 
     private fun firebaseAuthWithGoogle(idToken: String?) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
-            .addOnCompleteListener(mContext,
-                OnCompleteListener<AuthResult?> { task ->
+                    .addOnCompleteListener(
+                    OnCompleteListener<AuthResult?> { task ->
                     if (task.isSuccessful) {
                         val user = auth.currentUser
                         Log.d(TAG, "firebaseAuthWithGoogle: user = ${user}")
-
-                        //2초로딩후 화면 넘어감
                         startLoding()
-//                    updateUI(user)
                     } else {
                         Log.d(TAG, "signInWithCredential: fail")
                     }
                 })
     }
-
-    fun saveData(email: String, ps: String) {
-        val prefs = mContext.getSharedPreferences("userProfile", MODE_PRIVATE)
-        val editor: SharedPreferences.Editor = prefs.edit()
-        editor.putString("email", email)
-        Log.d(TAG, "saveData: email = ${prefs.getString("email", "").toString()}")
-
-        editor.putString("password", ps)
-        Log.d(TAG, "saveData: email = ${prefs.getString("password", "").toString()}")
-        editor.commit()
-    }
-
 
     //로딩화면 구현
     private fun startLoding() {
@@ -337,16 +250,6 @@ class FragmentSign : Fragment(), View.OnClickListener, ContractSign.View {
         handler.postDelayed({
             navController.navigate(R.id.action_fragmentLogin_to_fragmentMain)
         }, 2500)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mContext = context as MainActivity
-    }
-
-    override fun onDestroy() {
-        _binding = null
-        super.onDestroy()
     }
 }
 
