@@ -10,22 +10,14 @@
         style="@style/BasicStyle"
         android:layout_width="305dp"
         android:layout_height="81dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="12dp"
         android:text="00:00:00"
         android:textSize="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
-    <Button
-        android:id="@+id/start"
-        android:layout_width="163dp"
-        android:layout_height="151dp"
-        android:layout_marginTop="68dp"
-        android:text="시작"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
 
     <Button
         android:id="@+id/button2"
@@ -43,12 +35,12 @@
         style="@style/BasicStyle"
         android:layout_width="304dp"
         android:layout_height="91dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:hint="현재 러닝 거리"
         android:padding="8dp"
         android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timer" />
 
@@ -91,6 +83,26 @@
         app:layout_constraintStart_toEndOf="@+id/textView15"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/start"
+        android:layout_width="177dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="4dp"
+        android:text="시작"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/googleMap"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/start" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

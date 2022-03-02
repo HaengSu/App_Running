@@ -23,9 +23,10 @@ android {
         buildConfigField ("String", "KAKAO_API_KEY", properties["kakao_app_key"])
         buildConfigField ("String", "KAKAO_NATIVE_KEY", properties["kakao_native_key"])
         buildConfigField ("String", "WEATHER_SERVICEKEY", properties["weather_service_Key"])
+        buildConfigField ("String", "GOOGLE_MAP_KEY", properties["google_map_key"])
 
+        manifestPlaceholders = [GOOGLE_MAP_KEY : properties["google_map_key"]]
         manifestPlaceholders = [KAKAO_NATIVE_KEY : properties["kakao_native_key"]]
-
     }
 
     buildTypes {
@@ -86,6 +87,7 @@ dependencies {
 
 //    구글
     implementation 'com.google.android.gms:play-services-location:19.0.1'
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
 
 //    권한설정
     implementation "io.github.ParkSangGwon:tedpermission:2.3.0"

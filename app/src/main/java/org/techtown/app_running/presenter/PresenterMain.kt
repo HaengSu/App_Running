@@ -18,7 +18,8 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PresenterMain(private val view: ContractMain.View) : AppCompatActivity(), ContractMain.Presenter {
+class PresenterMain(private val view: ContractMain.View) : AppCompatActivity(),
+    ContractMain.Presenter {
     private val TAG: String = "PresenterMain 로그"
     private lateinit var baseDate: String  //조회 날짜
     private lateinit var baseTime: String   //조회 시간
@@ -46,9 +47,7 @@ class PresenterMain(private val view: ContractMain.View) : AppCompatActivity(), 
 
         call.enqueue(object : retrofit2.Callback<WEATHER> {
             override fun onResponse(call: Call<WEATHER>, response: Response<WEATHER>) {
-                Log.d(TAG, "onResponse: 통신 시작")
                 if (response.isSuccessful) {
-                    Log.d(TAG, "onResponse: 통신 성공")
                     val it: List<ITEM> = response.body()!!.response.body.items.item
 
                     val weatherArr = arrayOf(
@@ -90,24 +89,18 @@ class PresenterMain(private val view: ContractMain.View) : AppCompatActivity(), 
     //    위경도 가져오기(위치)
     override fun requestLocation(context: Context) {
         val locationClient = LocationServices.getFusedLocationProviderClient(context)
-
         try {
-            // 나의 현재 위치 요청
             val locationRequest = LocationRequest.create()
             locationRequest.run {
                 priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                interval = 60 * 1000    // 요청 간격(1초)
+                interval = 1000 * 3600
             }
             val locationCallback = object : LocationCallback() {
-//                 요청 결과
                 override fun onLocationResult(p0: LocationResult) {
                     p0?.let {
                         for (location in it.locations) {
-                            // 현재 위치의 위경도를 격자 좌표로 변환
-                            curPoint = ModelGetCurrent().change_n_xy(location.latitude, location.longitude)
-
-                            Log.d(TAG, "onLocationResult: 날씨 실행")
-                            // nx, ny지점의 날씨 가져와서 설정하기
+                            curPoint =
+                                ModelGetCurrent().change_n_xy(location.latitude, location.longitude)
                             setWeather(curPoint!!.x, curPoint!!.y)
                         }
                     }
