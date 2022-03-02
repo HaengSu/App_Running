@@ -7,7 +7,7 @@ plugins {
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
+def googleMapKey = properties.getProperty('google.map.key')
 android {
     compileSdk 31
 
@@ -23,9 +23,8 @@ android {
         buildConfigField ("String", "KAKAO_API_KEY", properties["kakao_app_key"])
         buildConfigField ("String", "KAKAO_NATIVE_KEY", properties["kakao_native_key"])
         buildConfigField ("String", "WEATHER_SERVICEKEY", properties["weather_service_Key"])
-        buildConfigField ("String", "GOOGLE_MAP_KEY", properties["google_map_key"])
 
-        manifestPlaceholders = [GOOGLE_MAP_KEY : properties["google_map_key"]]
+        manifestPlaceholders = [googleMapKey : googleMapKey]
         manifestPlaceholders = [KAKAO_NATIVE_KEY : properties["kakao_native_key"]]
     }
 
