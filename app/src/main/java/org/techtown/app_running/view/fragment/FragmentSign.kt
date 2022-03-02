@@ -36,7 +36,7 @@ import org.techtown.app_running.presenter.PresenterSign
 import org.techtown.app_running.view.CustomDialog
 
 
-class FragmentSign : BaseFragment<FragmentSignBinding>(), View.OnClickListener, ContractSign.View {
+class FragmentSign : BaseFragment<FragmentSignBinding>(), ContractSign.View {
     private val TAG: String = "FragmentLogin 로그"
 
     private lateinit var auth: FirebaseAuth
@@ -107,7 +107,6 @@ class FragmentSign : BaseFragment<FragmentSignBinding>(), View.OnClickListener, 
         checkPermission()
         loginCheck()
     }
-
 
     //    권한 요청
     fun checkPermission() {

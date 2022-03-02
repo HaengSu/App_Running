@@ -1,6 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/timer"
+        style="@style/BasicStyle"
+        android:layout_width="305dp"
+        android:layout_height="81dp"
+        android:layout_marginTop="60dp"
+        android:text="00:00:00"
+        android:textSize="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+    <Button
+        android:id="@+id/start"
+        android:layout_width="163dp"
+        android:layout_height="151dp"
+        android:layout_marginTop="68dp"
+        android:text="시작"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="51dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="28dp"
+        android:text="종료"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView14"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView16"
+        style="@style/BasicStyle"
+        android:layout_width="304dp"
+        android:layout_height="91dp"
+        android:layout_marginTop="32dp"
+        android:hint="현재 러닝 거리"
+        android:padding="8dp"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timer" />
+
+    <TextView
+        android:id="@+id/textView17"
+        style="@style/BasicStyle"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
+        android:hint="현재 속력"
+        android:padding="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/textView15"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView15"
+        style="@style/BasicStyle"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
+        android:hint="소모 칼로리"
+        android:padding="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/textView14"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView17"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView14"
+        style="@style/BasicStyle"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
+        android:hint="분당 속도"
+        android:padding="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView15"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

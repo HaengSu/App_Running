@@ -82,11 +82,29 @@
         android:id="@+id/fragmentCommonCount"
         android:name="org.techtown.app_running.view.fragment.FragmentCommonCount"
         android:label="FragmentCommonCount" >
-        <argument android:name="count"
-            app:argType="long"
-            android:defaultValue="0L" />
+        <argument
+            android:name="km"
+            app:argType="string"
+            android:defaultValue='""' />
+        <action
+            android:id="@+id/action_fragmentCommonCount_to_fragmentRunning"
+            app:destination="@id/fragmentRunning" />
+        <argument
+            android:name="count"
+            app:argType="string"
+            android:defaultValue='""' />
     </fragment>
-
-    <action android:id="@+id/action_global_fragmentAloneSetting"
-        app:destination="@id/fragmentAloneSetting"/>
+    <fragment
+        tools:layout="@layout/fragment_alone_running"
+        android:id="@+id/fragmentRunning"
+        android:name="org.techtown.app_running.view.fragment.FragmentRunning"
+        android:label="FragmentRunning" >
+        <argument android:name="km"
+            app:argType="string"
+            android:defaultValue='""' />
+        <argument
+            android:name="count"
+            app:argType="string"
+            android:defaultValue='""' />
+    </fragment>
 </navigation>

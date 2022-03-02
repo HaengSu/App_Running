@@ -12,7 +12,7 @@ import org.techtown.app_running.databinding.FragmentMainBinding
 import org.techtown.app_running.model.ModelWeather
 import org.techtown.app_running.presenter.*
 
-class FragmentMain : BaseFragment<FragmentMainBinding>(), View.OnClickListener, ContractMain.View {
+class FragmentMain : BaseFragment<FragmentMainBinding>(), ContractMain.View {
     private val TAG: String = "FragmentMain 로그"
     private lateinit var presenter: ContractMain.Presenter
 

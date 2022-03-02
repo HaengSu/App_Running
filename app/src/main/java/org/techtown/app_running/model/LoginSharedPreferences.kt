@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 
 object LoginSharedPreferences {
     private val USER_PROFILE : String = "userProfile"
+    private val USER_SETTING : String = "userSetting"
 
     fun setUserEmail(context: Context, input: String) {
         val prefs : SharedPreferences = context.getSharedPreferences(USER_PROFILE, Context.MODE_PRIVATE)

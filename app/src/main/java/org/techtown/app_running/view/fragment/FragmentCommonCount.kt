@@ -9,16 +9,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import org.techtown.app_running.R
 import org.techtown.app_running.common.BaseFragment
 import org.techtown.app_running.databinding.FragmentCommonCountBinding
 
 class FragmentCommonCount : BaseFragment<FragmentCommonCountBinding>() {
+
+
     private val TAG: String = "FragmentCommonCount 로그"
 
-    private val soundPool = SoundPool.Builder().build()
     private lateinit var currentCountDownTimer: CountDownTimer
     private lateinit var backCallback : OnBackPressedCallback
+    private lateinit var soundPool :SoundPool
+    private var tickingSoundId : Int =0
+    private var mCount : Long = 0
+    private lateinit var km :String
+    private lateinit var count :String
 
     override fun getFragmentViewBinding(
         inflater: LayoutInflater,
@@ -34,34 +42,44 @@ class FragmentCommonCount : BaseFragment<FragmentCommonCountBinding>() {
     }
 
     override fun initView(view: View) {
-
+        soundPool = SoundPool.Builder().build()
+        tickingSoundId = soundPool.load(mContext, R.raw.sound_dingdong,1)
     }
 
     override fun setEvent() {
         val args: FragmentCommonCountArgs by navArgs()
-        var count = args.count
-        Log.d(TAG, "setEvent:count = ${count}")
+        count = args.count
+        km = args.km
 
-        countDownTimer(count)
+        var intCount = count.replace("[^0-9]".toRegex(),"")
+        mCount = intCount.toLong()
+        Log.d(TAG, "setEvent: showCount = ${mCount}")
 
+        countDownTimer(mCount)
     }
 
-    fun countDownTimer(mCount: Long) {
-        val myCounter = object : CountDownTimer((mCount*1000), 1000) {
+    fun countDownTimer(c: Long) {
+        val myCounter = object : CountDownTimer((c*1000), 1000) {
             override fun onTick(p0: Long) {
                 binding.count.setText((p0 / 1000).toString())
             }
 
             override fun onFinish() {
-
+                tickingSoundId?.let {
+                    soundPool.play(it,1F,1F,0,0,1F)
+                    sendData()
+                }
             }
         }
-        Log.d(TAG, "countDownTimer: mCount = ${mCount*100}")
-
         myCounter.start()
     }
 
     override fun onClick(p0: View?) {
+    }
+
+    fun sendData() {
+        var action = FragmentCommonCountDirections.actionFragmentCommonCountToFragmentRunning(km,count)
+        findNavController().navigate(action)
     }
 
     override fun onAttach(context: Context) {

@@ -13,7 +13,7 @@ import org.techtown.app_running.contract.ContractSign
 import org.techtown.app_running.databinding.FragmentSignUpBinding
 import org.techtown.app_running.presenter.PresenterSign
 
-class FragmentSignUp : BaseFragment<FragmentSignUpBinding>(), View.OnClickListener, ContractSign.View {
+class FragmentSignUp : BaseFragment<FragmentSignUpBinding>(), ContractSign.View {
     private val TAG: String = "FragmentSignUp 로그"
 
     private lateinit var presenter: ContractSign.Presenter

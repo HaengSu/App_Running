@@ -1,22 +1,19 @@
 package org.techtown.app_running.view.fragment
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import org.techtown.app_running.R
 import org.techtown.app_running.common.BaseFragment
 import org.techtown.app_running.databinding.FragmentAloneReadyBinding
-import org.techtown.app_running.view.MainActivity
 
-class FragmentAloneReady : BaseFragment<FragmentAloneReadyBinding>() {
+class FragmentAloneReady : BaseFragment<FragmentAloneReadyBinding>(), View.OnClickListener {
     private val TAG: String = "FragmentAloneReady 로그"
-    private var mCount : Long = 0
+    private lateinit var km :String
+    private lateinit var count :String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,16 +34,12 @@ class FragmentAloneReady : BaseFragment<FragmentAloneReadyBinding>() {
 
     override fun setEvent() {
         val args : FragmentAloneReadyArgs by navArgs()
-        var km = args.km
-        var count = args.count
+        km = args.km
+        count = args.count
         Log.d(TAG, "setEvent: km = ${km},count = ${count}")
 
         binding.km.text = "거리 " + km
         binding.count.text = "카운트" + count
-        
-        var intCount = count.replace("[^0-9]".toRegex(),"")
-        Log.d(TAG, "setEvent: intCount = ${intCount}")
-        mCount = intCount.toLong()
     }
 
     override fun onClick(p0: View?) {
@@ -55,7 +48,7 @@ class FragmentAloneReady : BaseFragment<FragmentAloneReadyBinding>() {
         }
     }
     fun sendData() {
-        var action = FragmentAloneReadyDirections.actionFragmentAloneReadyToFragmentCommonCount(mCount)
+        var action = FragmentAloneReadyDirections.actionFragmentAloneReadyToFragmentCommonCount(km,count)
         findNavController().navigate(action)
     }
 }

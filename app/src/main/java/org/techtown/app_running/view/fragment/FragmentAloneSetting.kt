@@ -14,7 +14,7 @@ import org.techtown.app_running.R
 import org.techtown.app_running.common.BaseFragment
 import org.techtown.app_running.databinding.FragmentAloneSettingBinding
 
-class FragmentAloneSetting : BaseFragment<FragmentAloneSettingBinding>(), View.OnClickListener {
+class FragmentAloneSetting : BaseFragment<FragmentAloneSettingBinding>() {
     private val TAG: String = "FragmentAloneSetting 로그"
 
     override fun getFragmentViewBinding(
