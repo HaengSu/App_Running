@@ -3,11 +3,13 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
-def googleMapKey = properties.getProperty('google.map.key')
+//def googleMapApiKey = properties.getProperty('google_map_key')
+
 android {
     compileSdk 31
 
@@ -20,11 +22,12 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+//        buildConfigField ("String", "GOOGLE_MAP_KEY", properties["google_map_key"])
         buildConfigField ("String", "KAKAO_API_KEY", properties["kakao_app_key"])
         buildConfigField ("String", "KAKAO_NATIVE_KEY", properties["kakao_native_key"])
         buildConfigField ("String", "WEATHER_SERVICEKEY", properties["weather_service_Key"])
 
-        manifestPlaceholders = [googleMapKey : googleMapKey]
+//        manifestPlaceholders = [GOOGLE_MAP_KEY : properties["google_map_key"]]
         manifestPlaceholders = [KAKAO_NATIVE_KEY : properties["kakao_native_key"]]
     }
 
