@@ -131,12 +131,8 @@ class PresenterSign(private val view: ContractSign.View) : AppCompatActivity(),
         preference
         Log.d(TAG, "clearUserProfile: 자동저장 데이터 삭제 완료")
     }
-
-
 }
 
-
-//                        val user = auth.currentUser //회원 데이터 가져올때 사용
 
 
 

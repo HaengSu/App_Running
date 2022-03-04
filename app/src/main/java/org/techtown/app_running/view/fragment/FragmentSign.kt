@@ -1,14 +1,10 @@
 package org.techtown.app_running.view.fragment
 
 import android.app.Activity.RESULT_OK
-import android.app.AlertDialog
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,13 +21,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.TedPermission
 import org.techtown.app_running.R
 import org.techtown.app_running.common.BaseFragment
 import org.techtown.app_running.contract.ContractSign
 import org.techtown.app_running.databinding.FragmentSignBinding
 import org.techtown.app_running.model.LoginSharedPreferences
+import org.techtown.app_running.presenter.PresenterPermissionCheck
 import org.techtown.app_running.presenter.PresenterSign
 import org.techtown.app_running.view.CustomDialog
 
@@ -44,6 +39,7 @@ class FragmentSign : BaseFragment<FragmentSignBinding>(), ContractSign.View {
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var launcher: ActivityResultLauncher<Intent>
     private var tokenId: String? = null     // Google Auth 인증에 성공하면 token 값으로 설정된다
+    private lateinit var presenterPermissionCheck : PresenterPermissionCheck
 
     override fun success() {
         startLoding()
@@ -87,6 +83,7 @@ class FragmentSign : BaseFragment<FragmentSignBinding>(), ContractSign.View {
     }
 
     override fun initView(view: View) {
+        presenterPermissionCheck = PresenterPermissionCheck()
         presenter = PresenterSign(this)
 
         auth = Firebase.auth
@@ -104,48 +101,10 @@ class FragmentSign : BaseFragment<FragmentSignBinding>(), ContractSign.View {
     }
 
     override fun setEvent() {
-        checkPermission()
+        presenterPermissionCheck.checkPermission(mContext)
         loginCheck()
     }
 
-    //    권한 요청
-    fun checkPermission() {
-
-        val permissionListener = object : PermissionListener {
-            override fun onPermissionGranted() {
-                showToast("권한이 허용 되었습니다.")
-            }
-
-            override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-                AlertDialog.Builder(mContext)
-                    .setMessage("권한 거절로 인해 다수의 기능이 제한됩니다.")
-                    .setPositiveButton("권한 설정하러 가기") { dialog, which ->
-                        try {
-                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                .setData(Uri.parse("org.techtown.app_running.view.fragment"))
-                            startActivity(intent)
-                        } catch (e: ActivityNotFoundException) {
-                            e.printStackTrace()
-                            val intent = Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS)
-                            startActivity(intent)
-                        }
-                    }
-                    .show()
-                showToast("권한 거부")
-            }
-        }
-
-        TedPermission.with(mContext).apply {
-            setPermissionListener(permissionListener)
-            setRationaleMessage("정확한 위치 확인을 위해 \n권한을 허용해 주세요.")
-            setDeniedMessage("권한을 거부하셨습니다. [앱 설정]->[권한] 항목에서 허용해주세요.")
-            setPermissions(
-                android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            check()
-        }
-    }
 
     fun loginCheck() {
         if (!(LoginSharedPreferences.getUserEmail(mContext).isNullOrBlank())) {
